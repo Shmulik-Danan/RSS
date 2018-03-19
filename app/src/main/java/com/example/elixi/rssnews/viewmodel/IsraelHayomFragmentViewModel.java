@@ -6,6 +6,7 @@ import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.ViewModel;
 import android.os.AsyncTask;
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 import com.example.elixi.rssnews.services.RetrofitRepository;
 import com.example.elixi.rssnews.services.SyncDataInteractor;
@@ -23,8 +24,7 @@ import javax.inject.Singleton;
  */
 @Singleton
 public class IsraelHayomFragmentViewModel extends ViewModel implements SyncDataInteractor {
-
-
+    private static final String TAG = "IsraelHayomFraViewModel";
     private ItemRepository repository;
     private RetrofitRepository retrofitRepository;
 
@@ -33,12 +33,11 @@ public class IsraelHayomFragmentViewModel extends ViewModel implements SyncDataI
                                         @NonNull Application application) {
         this.repository = repository;
         this.retrofitRepository = retrofitRepository;
-        this.retrofitRepository.registerInteractot(this);
-
 
     }
     //Update//asks new data from Service
     public void Update() {
+        this.retrofitRepository.registerInteractot(this);
         this.retrofitRepository.get("http://www.israelhayom.co.il/rss.xml");
     }
     /**
@@ -52,6 +51,7 @@ public class IsraelHayomFragmentViewModel extends ViewModel implements SyncDataI
     //Indicate that List ready to load (will be call from our retrofitRepository)
     @Override
     public void onSyncData(ArrayList data) {
+        Log.d(TAG, "onSyncData: "+data);
         Insert(data);
     }
 
@@ -60,10 +60,7 @@ public class IsraelHayomFragmentViewModel extends ViewModel implements SyncDataI
 
     }
 
-    @Override
-    public void onSyncData(Object reference) {
 
-    }
     //Insert list to DB
     public boolean Insert(ArrayList<Item> item) {
         InsertTask addTask = new InsertTask();

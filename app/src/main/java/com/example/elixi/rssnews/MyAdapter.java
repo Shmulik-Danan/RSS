@@ -81,7 +81,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.RssItemHolder> {
         args.putString(TITLE, item.getTitle());
 
         holder.titleTextField.setText(item.getTitle());
-        
+
         ////parse HTML data
         String des = item.getDescription();
         if (des != null) {

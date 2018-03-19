@@ -5,6 +5,7 @@ import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.ViewModel;
 import android.os.AsyncTask;
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 import com.example.elixi.rssnews.services.RetrofitRepository;
 import com.example.elixi.rssnews.services.SyncDataInteractor;
@@ -22,7 +23,7 @@ import javax.inject.Singleton;
  */
 @Singleton
 public class WallaFragmentViewModel extends ViewModel implements SyncDataInteractor {
-
+    private static final String TAG = "WallaFragmentViewModel";
     private ItemRepository repository;
     private RetrofitRepository retrofitRepository;
 
@@ -31,12 +32,10 @@ public class WallaFragmentViewModel extends ViewModel implements SyncDataInterac
                                  @NonNull Application application) {
         this.repository = repository;
         this.retrofitRepository = retrofitRepository;
-        this.retrofitRepository.registerInteractot(this);
-
-
     }
     //Update//asks new data from Service
     public void Update(){
+        this.retrofitRepository.registerInteractot(this);
         this.retrofitRepository.get("http://rss.walla.co.il/feed/1?type=main");
     }
     /**
@@ -49,16 +48,12 @@ public class WallaFragmentViewModel extends ViewModel implements SyncDataInterac
     //Indicate that List ready to load (will be call from our retrofitRepository)
     @Override
     public void onSyncData(ArrayList data) {
+        Log.d(TAG, "onSyncData: "+data);
             Insert(data);
     }
 
     @Override
     public void onFailed(Object error) {
-
-    }
-
-    @Override
-    public void onSyncData(Object reference) {
 
     }
 

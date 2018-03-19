@@ -6,6 +6,7 @@ import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.ViewModel;
 import android.os.AsyncTask;
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 import com.example.elixi.rssnews.services.RetrofitRepository;
 import com.example.elixi.rssnews.services.SyncDataInteractor;
@@ -23,10 +24,7 @@ import javax.inject.Singleton;
  */
 @Singleton
 public class YnetFragmentViewModel extends ViewModel implements SyncDataInteractor {
-    /*private final LiveData<ArrayList<Item>> DbYnetObservable;
-    private final LiveData<ArrayList<Item>> DbWallaObservable;
-    private final LiveData<ArrayList<Item>> ArticlesListObservable;*/
-
+    private static final String TAG = "YnetFragmentViewModel";
     private ItemRepository repository;
     private RetrofitRepository retrofitRepository;
 
@@ -35,15 +33,11 @@ public class YnetFragmentViewModel extends ViewModel implements SyncDataInteract
                                  @NonNull Application application) {
         this.repository = repository;
         this.retrofitRepository = retrofitRepository;
-        this.retrofitRepository.registerInteractot(this);
-      /* if (check()) {
-            Update();
-       }else Log.d("", "YnetFragmentViewModel: ");*/
-
     }
 
     //Update//asks new data from Service
     public void Update() {
+        this.retrofitRepository.registerInteractot(this);
         this.retrofitRepository.get("http://www.ynet.co.il/Integration/StoryRss2.xml");
 
     }
@@ -58,16 +52,12 @@ public class YnetFragmentViewModel extends ViewModel implements SyncDataInteract
     //Indicate that List ready to load (will be call from our retrofitRepository)
     @Override
     public void onSyncData(ArrayList data) {
+        Log.d(TAG, "onSyncData: "+data);
         Insert(data);
     }
 
     @Override
     public void onFailed(Object error) {
-
-    }
-
-    @Override
-    public void onSyncData(Object reference) {
 
     }
 
@@ -92,7 +82,9 @@ public class YnetFragmentViewModel extends ViewModel implements SyncDataInteract
 
 
 
-
+ /* if (check()) {
+            Update();
+       }else Log.d("", "YnetFragmentViewModel: ");*/
 
 
 /*
